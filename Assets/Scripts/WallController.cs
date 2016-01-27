@@ -11,12 +11,9 @@ public class WallController : MonoBehaviour
     // Information about the Player object
     private GameObject player;
 
-    // Awaiting move orders
-    private bool moving;
+    // Initial state
     private Vector3 startPosition,
-                    direction = Vector3.zero,
                     targetLocation;
-    private float percentTravelled = 1.0f;
     
 
     /* Variables for Utilities */
@@ -40,7 +37,7 @@ public class WallController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
 
     }
@@ -51,6 +48,8 @@ public class WallController : MonoBehaviour
     // Moves the walls 
     IEnumerator WallMovement()
     {
+        float percentTravelled = 1.0f;
+
         while (true)
         {
             // Perform movements
@@ -73,14 +72,12 @@ public class WallController : MonoBehaviour
                 yield return new WaitForSeconds(1.0f);
 
                 // Try to generate a new place to move to
-                Vector3[] moveSettings = RandomMove();
+                targetLocation = RandomMove();
 
                 // Save starting point
                 startPosition = transform.position;
 
                 // Set things in motion
-                direction = moveSettings[0];
-                targetLocation = moveSettings[1];
                 percentTravelled = 0.0f;
             }
         }
@@ -90,13 +87,12 @@ public class WallController : MonoBehaviour
     /* Utilities */
 
     // An RNG to determine whether or not the wall moves at any given time
-    Vector3[] RandomMove()
+    Vector3 RandomMove()
     {
-        Vector3 direction = Vector3.zero,
-                targetLocation = transform.position;
+        Vector3 targetLocation = transform.position;
 
         // The closer the player is to the wall, the more likely the wall is to move
-        if (Random.Range(0.0f, 1.0f) > (Vector3.Distance(this.transform.position, player.transform.position) - 2.5f) / 100.0f)
+        if (Random.Range(0.0f, 1.0f) > (Vector3.Distance(this.transform.position, player.transform.position) + 2.5f) / 100.0f)
         {
             // Randomly decide which direction to go
             // Do NOT move off the edge
@@ -105,7 +101,6 @@ public class WallController : MonoBehaviour
                 case 0: // Forwards
                     if (this.transform.position.z < 47.0f)
                     {
-                        direction = Vector3.forward;
                         targetLocation = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + moveDistance);
                     }
 
@@ -114,7 +109,6 @@ public class WallController : MonoBehaviour
                 case 1: // Backwards
                     if (this.transform.position.z > -47.0f)
                     {
-                        direction = Vector3.back;
                         targetLocation = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - moveDistance);
                     }
 
@@ -123,7 +117,6 @@ public class WallController : MonoBehaviour
                 case 2: // Left
                     if (this.transform.position.x > -22.0f)
                     {
-                        direction = Vector3.left;
                         targetLocation = new Vector3(this.transform.position.x - moveDistance, this.transform.position.y, this.transform.position.z);
                     }
 
@@ -132,7 +125,6 @@ public class WallController : MonoBehaviour
                 case 3: // Right
                     if (this.transform.position.x < 22.0f)
                     {
-                        direction = Vector3.right;
                         targetLocation = new Vector3(this.transform.position.x + moveDistance, this.transform.position.y, this.transform.position.z);
                     }
 
@@ -140,7 +132,7 @@ public class WallController : MonoBehaviour
             }
         }
 
-        return new Vector3[2] { direction, targetLocation };
+        return targetLocation;
     }
 
     // Movement Easing equation: y = x^a / (x^a + (1-x)^a)

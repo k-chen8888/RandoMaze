@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         if (self.transform.position.y < -10)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            DeathPause.S.PauseDead();
         }
     }
 }

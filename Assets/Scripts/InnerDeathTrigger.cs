@@ -12,4 +12,10 @@ public class InnerDeathTrigger : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    void OnTriggerEnter(Collider otherObject)
+    {
+        // Kill me
+        DeathPause.S.PauseDead();
+    }
 }
