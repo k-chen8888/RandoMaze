@@ -4,6 +4,7 @@ using System.Collections;
 public class WallController : MonoBehaviour
 {
     // Information about how this object moves
+    private Rigidbody rb;
     public float speed = 5;
     public float moveDistance = 5;
 
@@ -28,6 +29,7 @@ public class WallController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         player = GameObject.FindGameObjectWithTag("Player");
 
         startPosition = transform.position;
@@ -62,7 +64,9 @@ public class WallController : MonoBehaviour
                 // Calculate new position based on easing
                 Vector3 newPos = Vector3.Lerp(startPosition, targetLocation, easedPercent);
                 
-                transform.Translate(newPos - transform.position);
+                // Move to the new position and immediately go to the next iteration
+                rb.MovePosition(newPos);
+                yield return null;
             }
             else
             {
