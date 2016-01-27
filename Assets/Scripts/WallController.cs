@@ -15,9 +15,7 @@ public class WallController : MonoBehaviour
     private Vector3 startPosition,
                     direction = Vector3.zero,
                     targetLocation;
-    private float percentTravelled = 0.0f;
-    public float waitTime = 1.0f;
-    private float nextMoveTime;
+    private float percentTravelled = 1.0f;
     
 
     /* Variables for Utilities */
@@ -35,30 +33,53 @@ public class WallController : MonoBehaviour
         startPosition = transform.position;
         targetLocation = transform.position;
 
-        // When to start moving
-        nextMoveTime = Time.time + waitTime;
-        moving = false;
+        // Fire up the movement coroutine
+        StartCoroutine(WallMovement());
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        // Move randomly every once in a while
-        if (Time.time > nextMoveTime && !moving)
+
+    }
+
+
+    /* Co-Routines */
+
+    // Moves the walls 
+    IEnumerator WallMovement()
+    {
+        while (true)
         {
-            Vector3[] moveSettings = RandomMove();
+            // Perform movements
+            if (percentTravelled < 1.0f)
+            {
+                // Calculate easing between current and target locations
+                percentTravelled += (Time.deltaTime * speed) / moveDistance;
+                percentTravelled = Mathf.Clamp01(percentTravelled);
+                float easedPercent = Ease(percentTravelled);
 
-            // Save starting point
-            startPosition = transform.position;
+                // Calculate new position based on easing
+                Vector3 newPos = Vector3.Lerp(startPosition, targetLocation, easedPercent);
+                
+                transform.Translate(newPos - transform.position);
+            }
+            else
+            {
+                yield return new WaitForSeconds(1.0f);
 
-            // Set things in motion
-            direction = moveSettings[0];
-            targetLocation = moveSettings[1];
-            moving = true;
+                // Try to generate a new place to move to
+                Vector3[] moveSettings = RandomMove();
+
+                // Save starting point
+                startPosition = transform.position;
+
+                // Set things in motion
+                direction = moveSettings[0];
+                targetLocation = moveSettings[1];
+                percentTravelled = 0.0f;
+            }
         }
-
-        // Moving along...
-        Move(direction, targetLocation);
     }
 
 
@@ -116,53 +137,6 @@ public class WallController : MonoBehaviour
         }
 
         return new Vector3[2] { direction, targetLocation };
-    }
-
-    // 
-    IEnumerator shooterTest()
-    {
-        while (true)
-        {
-            // Perform movements
-            
-
-            yield return new WaitForSeconds(1.0f);
-
-            // Try to generate a new place to move to
-            Vector3[] moveSettings = RandomMove();
-
-            // Save starting point
-            startPosition = transform.position;
-
-            // Set things in motion
-            direction = moveSettings[0];
-            targetLocation = moveSettings[1];
-            moving = true;
-        }
-    }
-
-    // Moves the object by translating a smooth movement
-    void Move(Vector3 direction, Vector3 targetLocation)
-    {
-        // Calculate easing between current and target locations
-        percentTravelled += Time.deltaTime * speed / moveDistance;
-        percentTravelled = Mathf.Clamp01(percentTravelled);
-        float easedPercent = Ease(percentTravelled);
-
-        // Calculate new position based on easing
-        Vector3 newPos = Vector3.Lerp(startPosition, targetLocation, easedPercent);
-
-        // Are we there yet?
-        if (percentTravelled >= 1.0f)
-        {
-            moving = false;
-            percentTravelled = 0.0f;
-
-            // Wait to start moving again
-            nextMoveTime = Time.time + waitTime;
-        }
-
-        transform.Translate(newPos - transform.position);
     }
 
     // Movement Easing equation: y = x^a / (x^a + (1-x)^a)
