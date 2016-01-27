@@ -9,6 +9,7 @@ public class DeathPause : MonoBehaviour
     
     /* A GUI Death Message */
     private Canvas self;
+    public Text countdown;
 
     // Happens before the thing starts up
     void Awake()
@@ -43,6 +44,7 @@ public class DeathPause : MonoBehaviour
         // After 3 seconds or if the user presses [SPACEBAR], reload the level
         while (Time.realtimeSinceStartup < endPause && !Input.GetKeyDown("space"))
         {
+            countdown.text = "" + (Mathf.Floor(endPause - Time.realtimeSinceStartup) + 1);
             yield return null;
         }
 
