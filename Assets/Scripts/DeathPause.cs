@@ -10,6 +10,7 @@ public class DeathPause : MonoBehaviour
     /* A GUI Death Message */
     private Canvas self;
     public Text countdown;
+    public float deathTimer = 1.0f;
 
     // Happens before the thing starts up
     void Awake()
@@ -39,7 +40,7 @@ public class DeathPause : MonoBehaviour
         // Pause the game and display a message
         Time.timeScale = 0;
         self.enabled = true;
-        float endPause = Time.realtimeSinceStartup + 3.0f;
+        float endPause = Time.realtimeSinceStartup + deathTimer;
 
         // After 3 seconds or if the user presses [SPACEBAR], reload the level
         while (Time.realtimeSinceStartup < endPause && !Input.GetKeyDown("space"))

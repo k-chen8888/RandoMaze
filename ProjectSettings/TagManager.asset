@@ -8,6 +8,8 @@ TagManager:
   - MovingWall
   - StaticWall
   - DeathDisplay
+  - WinDisplay
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -17,9 +19,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Player
+  - Goal
+  - Wall
   - 
   - 
   - 

@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     // Information about the RigidBody
     private Rigidbody rb;
-    public float speed = 3;
+    public float speed = 3.0f;
+    public float maxSpeed = 20.0f;
+    public float fallToDeath = -1.0f;
 
     // Information about the Player object
     private GameObject self;
@@ -30,13 +32,20 @@ public class PlayerController : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 move = new Vector3(moveHorizontal, 0, moveVertical);
-        rb.AddRelativeForce(move * speed);
+        if (rb.velocity.magnitude < maxSpeed)
+        {
+            rb.AddRelativeForce(move * speed);
+        }
+        else
+        {
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+        }
     }
 
     // For that moment when you're very, very dead
     void AmIDead()
     {
-        if (self.transform.position.y < -10)
+        if (self.transform.position.y < fallToDeath)
         {
             DeathPause.S.PauseDead();
         }
