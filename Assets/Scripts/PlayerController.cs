@@ -8,7 +8,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     public float speed = 3.0f;
     public float maxSpeed = 20.0f;
-    public float fallToDeath = -1.0f;
+
+    // Ways to die
+    public float fallToDeath = -1.0f,
+                 xWallDeath = 26.0f,
+                 zWallDeath = 51.0f;
+                 
 
     // Information about the Player object
     private GameObject self;
@@ -32,20 +37,29 @@ public class PlayerController : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 move = new Vector3(moveHorizontal, 0, moveVertical);
-        if (rb.velocity.magnitude < maxSpeed)
+        if (rb.velocity.magnitude == 0)
         {
+            // A speed burst to get things going
+            rb.AddRelativeForce(move * 2 * speed);
+        }
+        else if (rb.velocity.magnitude < maxSpeed)
+        {
+            // Keep going...
             rb.AddRelativeForce(move * speed);
         }
         else
         {
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+            // Too fast!!
+            rb.AddRelativeForce(-move * speed);
         }
     }
 
     // For that moment when you're very, very dead
     void AmIDead()
     {
-        if (self.transform.position.y < fallToDeath)
+        if (transform.position.y <= fallToDeath ||
+            Mathf.Abs(transform.position.x) >= xWallDeath ||
+            Mathf.Abs(transform.position.z) >= zWallDeath)
         {
             DeathPause.S.PauseDead();
         }

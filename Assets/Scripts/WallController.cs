@@ -50,6 +50,9 @@ public class WallController : MonoBehaviour
     {
         float percentTravelled = 1.0f;
 
+        // The first movements are calculated after 1 second
+        yield return new WaitForSeconds(1.0f);
+
         while (true)
         {
             // Perform movements

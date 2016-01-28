@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class WinPause : MonoBehaviour {
+public class WinPause : MonoBehaviour
+{
     public static WinPause S;
 
     /* A GUI Death Message */
