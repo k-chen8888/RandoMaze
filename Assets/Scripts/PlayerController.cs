@@ -13,15 +13,10 @@ public class PlayerController : MonoBehaviour
     public float fallToDeath = -1.0f,
                  xWallDeath = 26.0f,
                  zWallDeath = 51.0f;
-                 
-
-    // Information about the Player object
-    private GameObject self;
-
+    
     // Use this for initialization
     void Start()
     {
-        self = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
     }
 

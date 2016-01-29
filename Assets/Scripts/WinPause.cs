@@ -49,7 +49,7 @@ public class WinPause : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(level);
         Time.timeScale = 1;
     }
 
