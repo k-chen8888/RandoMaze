@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/Maze0.unity
   - enabled: 1
     path: Assets/Maze1.unity
+  - enabled: 1
+    path: Assets/Maze2.unity
