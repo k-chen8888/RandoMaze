@@ -7,7 +7,7 @@ public class WinPause : MonoBehaviour
 {
     public static WinPause S;
 
-    /* A GUI Death Message */
+    /* A GUI Victory Message */
     private Canvas self;
     public Text countdown;
     private float winTimer = 3.0f;

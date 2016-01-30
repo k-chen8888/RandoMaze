@@ -9846,7 +9846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58b2c4d84e9ed8429d917b2e2a49efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextLevel: Maze2
+  nextLevel: End
   spinSpeed: 10
 --- !u!54 &1940423570
 Rigidbody:
